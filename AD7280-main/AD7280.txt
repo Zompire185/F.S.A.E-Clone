@@ -1,0 +1,51 @@
+metodi:
+- AD7280(int sspin,int cnvstpin, int chipNumber) 
+	int sspin: intero che rappresenta il pin a cui è collegato il segnale di ChipSelect
+	int cnvstpin: intero che rappresenta il pin a cui è collegato il segnale di conversione
+	int chpNumber: intero che rappresenta i chip che sono collegati nella connessione in serie 
+	il metodo costruttore si occupa di prendere in ingresso i pin attraverso i quali il micro
+	comunica e dichiara la modalità dei pin
+-bool begin()
+	il metodo si occupa dell' inizializzazione dei gli integrati della catena eseguendo anche 
+	un prova di comunicazione. Se i controlli falliscono il metodo restituisce false e la
+	variabile go viene impostata a falso. Se va buon fine viene restituito true e go diventa vero
+-void readall(unsigned int result[],int input)
+	unsigned int result[]: array che verrà riempito dai risultati della conversione
+	int input: intero che indica il registro 
+	il metodo permette di leggere il valore della conversione. L'arrai dei risultati ha 
+	dimensione dei chip (n chip, n celle) collegati. Per input si intende i valori da 0 a 5
+	i voltaggi delle celle da cella 1 a cella 5. I valori da 6 a 11 sono i valori dei 
+	termistori, si tratta del voltaggio al punto centrale di un partitore di tensione
+	composto da un termistore ed una resistenza, entrambi da 10kohm.
+	Qualora non sia stata eseguita correttamente l'inizializzazione, l'array conterrà il valore
+	massimo possibile (0xFFFF)
+-  void openwire() 
+	il metodo forza una condizione di errore nel sistema azionando le uscite del 
+	bilanciamento in maniera alterna. In caso ci sia un filo rotto il voltaggio letto 
+	può assumere un valore molto basso o molto alto, oltre la soglia di voltaggio minimo o voltaggio
+	massimo, fatto che verrà evidenziato dalla funzione di protezione dell' integrato.
+-void balance(int device, bool cel0, bool cel1, bool cel2, bool cel3, bool cel4, bool cel5) 
+	int device: intero che rappresenta il dispositivo di cui si deve modificare le uscite
+	bool cel0:valore boooleano che rappresenta l'uscita 1
+	bool cel1:valore boooleano che rappresenta l'uscita 2
+	bool cel2:valore boooleano che rappresenta l'uscita 3
+	bool cel3:valore boooleano che rappresenta l'uscita 4
+	bool cel4:valore boooleano che rappresenta l'uscita 5
+	bool cel5:valore boooleano che rappresenta l'uscita 6
+	il metodo modifica il registro corrispondende, attivando l'uscita corrispondente
+-bool threshold(unsigned int Vlow, unsigned int Vhigh, unsigned int Tlow, unsigned int Thigh)
+	unsigned int Vlow: valore che rappresenta la soglia di intervento per sottovoltaggio
+	unsigned int Vhigh: valore che rappresenta la soglia di intervento per sopravoltaggio
+	unsigned int Tlow: valore che rappresenta la soglia di intervento per sottotemperature
+	unsigned int Thigh: valore che rappresenta la soglia di intervento per sopravoltaggio
+	il metodo imposta le soglie di intervento delle protezioni del integrato. 
+	Il valore booleano restituito è vero se i valori sono nelle soglie operative, altrimenti
+	restituisce falso
+-bool selfTest()
+	metodo che verifica l'integrità dell' apparato di conversione dei vari integrati.
+	Oltre a restituire vero in caso di errore, pone go a falso. In caso di un sistema sano
+	il metodo restituisce falso e go è posto a vero
+-  bool Run() 
+	metodo che restituisce il valore di go, se vero tutto è normale e se falso si è verificato
+	un problema e la maggior parte delle funzioni sono inibite, per ripristinare lo stato
+	si può invocare selftest() o begin().
