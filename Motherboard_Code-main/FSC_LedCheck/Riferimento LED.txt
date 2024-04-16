@@ -1,0 +1,18 @@
+/* Struttura di riferimento dei bit per i LED
+	RTD = 0, 		Led di stato per il Buzzer Ready-to-Drive (READY = ON)
+	BRAKE = 1,		Led di stato per il freno
+	PUMP= 2,		Led di stato per il circuito di raffreddamento
+	I2C_OK = 3,		Led di stato per il volante
+	CHARGE = 4,		Led di stato per la procedura di pre-charge
+	SHUTDOWN = 5,	Led di stato per il circuito di shutdown
+	OVERHEAT = 6,	Led di stato per la soglia di temperatura
+	COOL_OK = 7,	Led di stato per il sensore di flusso
+	BAT_LOW = 8,	Led di stato per la carica bassa della batteria
+	BMS_OK = 9,		Led di stato per la comunicazione con il circuito di BMS
+	GPS_OK = 10,	Led di stato per la comunicazione GPS
+	TELE_OK = 11,	Led di stato per la telemetria	
+	DRSIG_OK = 12,	Led di stato per il sistema APPS
+	SENS_OK = 13,	Led di stato per i sensori
+	CAN_OK = 14		Led di stato per la comunicazione CAN
+	FAN = 15 		Led di stato per le ventole di raffreddamento
+*/
