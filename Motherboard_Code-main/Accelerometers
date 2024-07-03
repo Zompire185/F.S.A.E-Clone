@@ -1,0 +1,42 @@
+#include <Wire.h>
+#include <FlexCAN_T4.h>
+#include <Adafruit_LIS3DH.h>
+#define I2C_SDA_PIN 18
+#define I2C_SCL_PIN 19
+#define CAN_BAUD_RATE 500000
+
+Adafruit_LIS3DH lis = Adafruit_LIS3DH();
+FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> can1;
+void setup() {
+    Serial.begin(9600);
+
+    Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
+    
+    if (!lis.begin(0x18)) {
+        Serial.println("Could not start accelerometer.");
+        while (1);
+    }
+
+    lis.setRange(LIS3DH_RANGE_2_G);
+
+    can1.begin();
+    can1.setBaudRate(CAN_BAUD_RATE);
+
+    Serial.println("Setup complete.");
+}
+void loop() {
+    sensors_event_t event;
+    lis.getEvent(&event);
+
+    float x = event.acceleration.x;
+    float y = event.acceleration.y;
+
+    CAN_message_t msg;
+    msg.id = 0x123;
+    msg.buf[0] = (int8_t)(x * 100);
+    msg.buf[1] = (int8_t)(y * 100);
+
+    can1.write(msg);
+
+    delay(100);
+}
